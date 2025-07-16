@@ -1,7 +1,7 @@
 interface RoutePoint {
   lat: number;
   lng: number;
-  timestamp: number;
+  timestamp: number; // Original timestamp from when the point was added
 }
 
 interface RouteDetails {
@@ -9,7 +9,8 @@ interface RouteDetails {
   description: string;
 }
 
-export const exportToGPX = (points: RoutePoint[], activity: 'run' | 'bike', routeDetails?: RouteDetails) => {
+// Tambahkan appPace sebagai parameter opsional
+export const exportToGPX = (points: RoutePoint[], activity: 'run' | 'bike', routeDetails?: RouteDetails, appPace?: number) => {
   if (points.length === 0) {
     alert('No route points to export. Please create a route first.');
     return;
@@ -19,46 +20,63 @@ export const exportToGPX = (points: RoutePoint[], activity: 'run' | 'bike', rout
   const now = new Date().toISOString();
   const routeName = routeDetails?.name || `${activityType} Route`;
   const routeDescription = routeDetails?.description || `Generated route for ${activityType}`;
-  
-  // Calculate total distance
-  const calculateDistance = () => {
-    if (points.length < 2) return 0;
-    
-    let totalDistance = 0;
-    for (let i = 1; i < points.length; i++) {
-      const R = 6371; // Earth's radius in km
-      const dLat = (points[i].lat - points[i-1].lat) * Math.PI / 180;
-      const dLng = (points[i].lng - points[i-1].lng) * Math.PI / 180;
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(points[i-1].lat * Math.PI / 180) * Math.cos(points[i].lat * Math.PI / 180) *
-                Math.sin(dLng/2) * Math.sin(dLng/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      totalDistance += R * c;
-    }
-    return totalDistance;
+
+  const R = 6371; // Earth's radius in km for distance calculations
+
+  // Function to calculate distance between two lat/lng points (Haversine formula)
+  const haversineDistance = (p1: RoutePoint, p2: RoutePoint): number => {
+    const dLat = (p2.lat - p1.lat) * Math.PI / 180;
+    const dLng = (p2.lng - p1.lng) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(p1.lat * Math.PI / 180) * Math.cos(p2.lat * Math.PI / 180) *
+              Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in km
   };
 
-  const totalDistance = calculateDistance();
+  let totalDistance = 0;
+  if (points.length > 1) {
+    for (let i = 1; i < points.length; i++) {
+      totalDistance += haversineDistance(points[i - 1], points[i]);
+    }
+  }
+
   const totalPoints = points.length;
-  
-  // Convert points to GPX format with proper timestamps
-  const convertToGPX = (point: RoutePoint, index: number) => {
-    // Create realistic timestamps with intervals
-    const baseTime = new Date(point.timestamp);
-    const timeOffset = index * 10000; // 10 seconds between points
-    const pointTime = new Date(baseTime.getTime() + timeOffset);
-    
+
+  // Calculate speed (km/h) based on provided pace (seconds/km)
+  // If appPace is 0 or undefined, default to a reasonable speed (e.g., 10 km/h for cycling, 5 km/h for running)
+  const calculatedSpeed = appPace && appPace > 0
+    ? (3600 / appPace) // Convert seconds/km to km/h
+    : (activity === 'run' ? 5 : 20); // Default speed in km/h
+
+  const gpxPoints = points.map((point, index) => {
+    // Calculate cumulative distance to this point
+    let cumulativeDistanceToPoint = 0;
+    if (index > 0) {
+      for (let i = 1; i <= index; i++) {
+        cumulativeDistanceToPoint += haversineDistance(points[i - 1], points[i]);
+      }
+    }
+
+    // Calculate elapsed time based on cumulative distance and calculated speed
+    // time_in_seconds = distance_in_km / (speed_in_km/h / 3600_seconds_per_hour)
+    const elapsedSeconds = (calculatedSpeed > 0) ? (cumulativeDistanceToPoint / calculatedSpeed) * 3600 : 0;
+
+    // Use the route's starting timestamp for the first point, then add elapsedSeconds
+    const startTime = new Date(points[0].timestamp || Date.now()); // Fallback to current time if first point has no timestamp
+    const pointTime = new Date(startTime.getTime() + elapsedSeconds * 1000);
+
     return {
       lat: point.lat.toFixed(6),
       lng: point.lng.toFixed(6),
       time: pointTime.toISOString(),
-      elevation: (Math.random() * 50 + 100).toFixed(1) // Mock elevation data
+      elevation: (0.0).toFixed(1) // Fixed elevation for consistency
     };
-  };
+  });
 
-  const gpxPoints = points.map(convertToGPX);
-  
-  // Enhanced GPX content with more metadata
+  // Ensure totalDistance in GPX metadata matches the actual calculated totalDistance
+  const totalDistanceFormatted = totalDistance.toFixed(3);
+
   const gpxContent = `<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="RouteTracker v1.0" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
   <metadata>
@@ -69,42 +87,30 @@ export const exportToGPX = (points: RoutePoint[], activity: 'run' | 'bike', rout
     </author>
     <time>${now}</time>
     <keywords>${activityType}, route, gps, track</keywords>
-    <bounds minlat="${Math.min(...gpxPoints.map(p => parseFloat(p.lat)))}" 
-            minlon="${Math.min(...gpxPoints.map(p => parseFloat(p.lng)))}" 
-            maxlat="${Math.max(...gpxPoints.map(p => parseFloat(p.lat)))}" 
+    <bounds minlat="${Math.min(...gpxPoints.map(p => parseFloat(p.lat)))}"
+            minlon="${Math.min(...gpxPoints.map(p => parseFloat(p.lng)))}"
+            maxlat="${Math.max(...gpxPoints.map(p => parseFloat(p.lat)))}"
             maxlon="${Math.max(...gpxPoints.map(p => parseFloat(p.lng)))}"/>
   </metadata>
-  
-  <!-- Route waypoints -->
-  ${gpxPoints.length > 0 ? `<rte>
-    <name>${routeName} - Waypoints</name>
-    <desc>Route waypoints for ${routeName}</desc>
-    ${gpxPoints.filter((_, index) => index === 0 || index === gpxPoints.length - 1 || index % 10 === 0).map((point, index) => `
-    <rtept lat="${point.lat}" lon="${point.lng}">
-      <ele>${point.elevation}</ele>
-      <time>${point.time}</time>
-      <name>WP${index + 1}</name>
-      <desc>Waypoint ${index + 1}</desc>
-    </rtept>`).join('')}
-  </rte>` : ''}
-  
-  <!-- Track data -->
+
   <trk>
     <name>${routeName}</name>
     <desc>${routeDescription}</desc>
     <type>${activityType}</type>
     <extensions>
-      <distance>${totalDistance.toFixed(3)}</distance>
+      <distance>${totalDistanceFormatted}</distance>
       <points>${totalPoints}</points>
       <activity>${activity}</activity>
+      <pace>${appPace ? appPace.toFixed(2) : 'N/A'}</pace>
+      <speed>${calculatedSpeed.toFixed(2)}</speed>
     </extensions>
     <trkseg>
-      ${gpxPoints.map((point, index) => `
+      ${gpxPoints.map((point) => `
       <trkpt lat="${point.lat}" lon="${point.lng}">
         <ele>${point.elevation}</ele>
         <time>${point.time}</time>
         <extensions>
-          <speed>${(Math.random() * 5 + 8).toFixed(2)}</speed>
+          <speed>${calculatedSpeed.toFixed(2)}</speed>
           <course>${(Math.random() * 360).toFixed(0)}</course>
         </extensions>
       </trkpt>`).join('')}
@@ -117,12 +123,12 @@ export const exportToGPX = (points: RoutePoint[], activity: 'run' | 'bike', rout
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  
+
   // Generate filename
-  const fileName = routeDetails?.name 
+  const fileName = routeDetails?.name
     ? `${routeDetails.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.gpx`
     : `${activityType}-route-${new Date().toISOString().split('T')[0]}.gpx`;
-  
+
   a.download = fileName;
   document.body.appendChild(a);
   a.click();

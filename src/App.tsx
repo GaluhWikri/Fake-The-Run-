@@ -19,13 +19,13 @@ function App() {
   const [showWaypoints, setShowWaypoints] = useState(false);
   const [activity, setActivity] = useState<'run' | 'bike'>('run');
   const [routePoints, setRoutePoints] = useState<RoutePoint[]>([]);
-  const [pace, setPace] = useState(0);
+  const [pace, setPace] = useState(0); // Ini adalah pace (detik per km) dari PaceCalculator
   const [routeDetails, setRouteDetails] = useState({ name: '', description: '' });
   const [showDownloadSuccess, setShowDownloadSuccess] = useState(false);
 
   const calculateDistance = () => {
     if (routePoints.length < 2) return 0;
-    
+
     let totalDistance = 0;
     for (let i = 1; i < routePoints.length; i++) {
       const R = 6371; // Earth's radius in km
@@ -41,7 +41,8 @@ function App() {
   };
 
   const handleExport = () => {
-    exportToGPX(routePoints, activity, routeDetails);
+    // Meneruskan nilai 'pace' ke fungsi exportToGPX
+    exportToGPX(routePoints, activity, routeDetails, pace);
     
     // Show success notification
     setShowDownloadSuccess(true);
@@ -132,7 +133,7 @@ function App() {
               <RouteStats
                 points={routePoints}
                 activity={activity}
-                pace={pace}
+                pace={pace} // Pace passed to RouteStats for display
                 onExport={handleExport}
                 showDownloadSuccess={showDownloadSuccess}
               />
