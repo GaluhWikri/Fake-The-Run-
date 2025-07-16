@@ -49,6 +49,10 @@ export const exportToGPX = (points: RoutePoint[], activity: 'run' | 'bike', rout
     ? (3600 / appPace) // Convert seconds/km to km/h
     : (activity === 'run' ? 5 : 20); // Default speed in km/h
 
+  // Parameter untuk simulasi elevasi
+  const baseElevation = 100; // Elevasi dasar dalam meter
+  const elevationAmplitude = 50; // Amplitudo gelombang elevasi dalam meter
+
   const gpxPoints = points.map((point, index) => {
     // Calculate cumulative distance to this point
     let cumulativeDistanceToPoint = 0;
@@ -66,11 +70,15 @@ export const exportToGPX = (points: RoutePoint[], activity: 'run' | 'bike', rout
     const startTime = new Date(points[0].timestamp || Date.now()); // Fallback to current time if first point has no timestamp
     const pointTime = new Date(startTime.getTime() + elapsedSeconds * 1000);
 
+    // Simulated undulating elevation
+    // Menggunakan fungsi sinus untuk membuat profil elevasi yang naik turun secara lembut
+    const simulatedElevation = baseElevation + elevationAmplitude * Math.sin(index * Math.PI / (points.length / 5)); // Menyesuaikan siklus gelombang
+
     return {
       lat: point.lat.toFixed(6),
       lng: point.lng.toFixed(6),
       time: pointTime.toISOString(),
-      elevation: (0.0).toFixed(1) // Fixed elevation for consistency
+      elevation: simulatedElevation.toFixed(1) // Menggunakan elevasi simulasi
     };
   });
 
