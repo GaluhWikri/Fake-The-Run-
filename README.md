@@ -1,18 +1,19 @@
 🏃 Fake The Run
-Sebuah aplikasi web sederhana untuk menghasilkan file data GPS (.gpx) palsu. Anda dapat menentukan jarak dan waktu tempuh, dan aplikasi ini akan membuat file GPX yang bisa diunggah ke berbagai platform olahraga seperti Strava atau lainnya.
+A simple web application to generate fake GPS data files (.gpx). You can specify the distance and duration, and this application will create a GPX file that can be uploaded to various sports platforms like Strava or others.
 
-✨ Demo / Pratinjau Langsung
-Anda bisa mencoba aplikasi ini secara langsung melalui tautan berikut:
+✨ Demo / Live Preview
+You can try the application directly via the following link:
 
 ➡️ https://fake-the-run.vercel.app/
 
-🚀 Fitur Utama
-Pembuatan File GPX: Membuat file .gpx kustom berdasarkan input pengguna.
+!(https://placehold.co/800x450/2d3748/ffffff?text=Your+App+Screenshot+Here)
+(Suggestion: Replace the image above with a screenshot of your application to make it more attractive!)
 
-Input Fleksibel: Tentukan sendiri nama aktivitas, jarak (dalam km), dan waktu tempuh (dalam menit).
+🚀 Key Features
+GPX File Generation: Creates custom .gpx files based on user input.
 
-Kalkulasi Otomatis: Kecepatan rata-rata (pace) dihitung secara otomatis.
+Flexible Input: Define your own activity name, distance (in km), and duration (in minutes).
 
-Antarmuka Minimalis: Desain yang bersih dan mudah digunakan tanpa perlu instalasi.
+Automatic Calculation: The average pace is calculated automatically.
 
-
+Minimalist Interface: A clean and easy-to-use design with no installation required.
