@@ -6,8 +6,6 @@ You can try the application directly via the following link:
 
 ➡️ https://fake-the-run.vercel.app/
 
-!(https://placehold.co/800x450/2d3748/ffffff?text=Your+App+Screenshot+Here)
-(Suggestion: Replace the image above with a screenshot of your application to make it more attractive!)
 
 🚀 Key Features
 GPX File Generation: Creates custom .gpx files based on user input.
