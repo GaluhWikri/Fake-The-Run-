@@ -15,10 +15,10 @@ interface RoutePoint {
 
 const CreateRoutePage = () => {
     const [isDrawing, setIsDrawing] = useState(true);
-    const [showWaypoints, setShowWaypoints] = useState(false);
+    const [showWaypoints, setShowWaypoints] = useState(true);
     const [activity, setActivity] = useState<'run' | 'bike'>('run');
     const [routePoints, setRoutePoints] = useState<RoutePoint[]>([]);
-    const [pace, setPace] = useState(0); // Pace in seconds per km
+    const [pace, setPace] = useState(360); // Default pace: 6:00/km
     const [routeDetails, setRouteDetails] = useState({ name: '', description: '' });
     const [showDownloadSuccess, setShowDownloadSuccess] = useState(false);
   
@@ -49,67 +49,80 @@ const CreateRoutePage = () => {
     };
 
     return (
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            <DrawingTools
-              isDrawing={isDrawing}
-              onDrawingToggle={() => setIsDrawing(!isDrawing)}
-              showWaypoints={showWaypoints}
-              onWaypointsToggle={() => setShowWaypoints(!showWaypoints)}
-            />
-            
-            <ActivitySelector
-              activity={activity}
-              onActivityChange={setActivity}
-            />
-            
-            <PaceCalculator
-              activity={activity}
-              distance={calculateDistance()}
-              onPaceChange={setPace}
-            />
-          </div>
-
-          {/* Canvas Area */}
-          <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-2 sm:p-4">
-              <div className="flex items-center justify-between mb-4 px-2 sm:px-0">
-                <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Peta Interaktif</h2>
-                <div className="text-sm text-slate-600 dark:text-slate-400">
-                  {isDrawing ? 'Klik untuk menambahkan titik jalan' : 'Mode tampilan'}
+        <main className="max-w-screen-2xl mx-auto p-4 sm:p-6 lg:p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Map Area */}
+                <div className="lg:col-span-2">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg h-[calc(100vh-100px)] overflow-hidden">
+                        <MapCanvas
+                            isDrawing={isDrawing}
+                            showWaypoints={showWaypoints}
+                            onRouteChange={setRoutePoints}
+                        />
+                    </div>
                 </div>
-              </div>
-              
-              <div className="h-96 lg:h-[500px]">
-                <MapCanvas
-                  isDrawing={isDrawing}
-                  showWaypoints={showWaypoints}
-                  onRouteChange={setRoutePoints}
-                />
-              </div>
-            </div>
-          </div>
 
-          {/* Right Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="space-y-6">
-              <RouteStats
-                points={routePoints}
-                activity={activity}
-                pace={pace}
-                onExport={handleExport}
-                showDownloadSuccess={showDownloadSuccess}
-              />
-              
-              <RouteForm onFormChange={setRouteDetails} />
+                {/* Controls Sidebar */}
+                <div className="lg:col-span-1">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg h-[calc(100vh-100px)] flex flex-col">
+                        <div className="flex-grow p-1 overflow-y-auto">
+                            <div className="p-4 space-y-6">
+                                {/* Section 1: Stats & Export */}
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Statistik & Ekspor</h3>
+                                    <RouteStats
+                                        points={routePoints}
+                                        activity={activity}
+                                        pace={pace}
+                                        onExport={handleExport}
+                                        showDownloadSuccess={showDownloadSuccess}
+                                    />
+                                </div>
+
+                                <hr className="border-slate-200 dark:border-slate-700" />
+
+                                {/* Section 2: Planning Tools */}
+                                <div className="space-y-4">
+                                     <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Alat Perencanaan</h3>
+                                    <DrawingTools
+                                        isDrawing={isDrawing}
+                                        onDrawingToggle={() => setIsDrawing(!isDrawing)}
+                                        showWaypoints={showWaypoints}
+                                        onWaypointsToggle={() => setShowWaypoints(!showWaypoints)}
+                                    />
+                                    <ActivitySelector
+                                        activity={activity}
+                                        onActivityChange={setActivity}
+                                    />
+                                </div>
+                                
+                                <hr className="border-slate-200 dark:border-slate-700" />
+
+                                {/* Section 3: Pace */}
+                                <div className="space-y-4">
+                                     <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Kalkulator Kecepatan</h3>
+                                    <PaceCalculator
+                                        activity={activity}
+                                        distance={calculateDistance()}
+                                        onPaceChange={setPace}
+                                    />
+                                </div>
+
+                                <hr className="border-slate-200 dark:border-slate-700" />
+                                
+                                {/* Section 4: Details */}
+                                <div className="space-y-4">
+                                     <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Detail Rute</h3>
+                                    <RouteForm onFormChange={setRouteDetails} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </main>
+        </main>
     )
 }
 
 export default CreateRoutePage;
-

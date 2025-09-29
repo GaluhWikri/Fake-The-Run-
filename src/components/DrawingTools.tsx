@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { MapPin, Navigation, Route } from 'lucide-react';
 
 interface DrawingToolsProps {
