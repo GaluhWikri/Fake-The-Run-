@@ -96,7 +96,14 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToCreate, theme }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center text-sm text-brand-secondary dark:text-gray-400">
             <p>&copy; {new Date().getFullYear()} Fake The Run. All Rights Reserved.</p>
+            <p className="text-sm">
+              Buat, rencanakan, dan ekspor rute Anda untuk Strava dan aplikasi kebugaran lainnya
+            </p>
+            <p className="text-xs mt-2">
+              Kompatibel dengan format GPX • Siap diekspor untuk diunggah ke Strava
+            </p>
           </div>
+
         </div>
       </footer>
     </main>
