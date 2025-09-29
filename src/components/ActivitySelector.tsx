@@ -8,16 +8,14 @@ interface ActivitySelectorProps {
 
 export default function ActivitySelector({ activity, onActivityChange }: ActivitySelectorProps) {
   return (
-    <div className="bg-white rounded-lg p-4 shadow-lg">
-      <h3 className="text-sm font-medium text-slate-700 mb-3">Activity Type</h3>
-      
-      <div className="grid grid-cols-2 gap-2">
+    <div className="bg-brand-light/50 dark:bg-brand-dark/50 rounded-lg p-4 shadow-inner">
+      <div className="grid grid-cols-2 gap-3">
         <button
           onClick={() => onActivityChange('run')}
           className={`p-3 rounded-lg border-2 transition-all hover:shadow-md ${
             activity === 'run'
-              ? 'border-green-500 bg-green-50 text-green-600'
-              : 'border-slate-200 hover:border-slate-300'
+              ? 'border-brand-secondary bg-brand-secondary/10 text-brand-secondary'
+              : 'border-black/10 dark:border-white/10 hover:border-brand-secondary/50 text-brand-dark dark:text-brand-light'
           }`}
         >
           <User className="w-5 h-5 mx-auto mb-1" />
@@ -28,8 +26,8 @@ export default function ActivitySelector({ activity, onActivityChange }: Activit
           onClick={() => onActivityChange('bike')}
           className={`p-3 rounded-lg border-2 transition-all hover:shadow-md ${
             activity === 'bike'
-              ? 'border-green-500 bg-green-50 text-green-600'
-              : 'border-slate-200 hover:border-slate-300'
+              ? 'border-brand-secondary bg-brand-secondary/10 text-brand-secondary'
+              : 'border-black/10 dark:border-white/10 hover:border-brand-secondary/50 text-brand-dark dark:text-brand-light'
           }`}
         >
           <Bike className="w-5 h-5 mx-auto mb-1" />

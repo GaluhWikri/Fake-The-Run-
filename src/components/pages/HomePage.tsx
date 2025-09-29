@@ -1,5 +1,5 @@
 import React from 'react';
-import { Map, Zap, Download, ArrowRight } from 'lucide-react';
+import { ArrowRight, PencilLine, FileCog, Download } from 'lucide-react';
 
 interface HomePageProps {
   onNavigateToCreate: () => void;
@@ -7,65 +7,101 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ onNavigateToCreate }) => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="pt-20 pb-12 md:pt-32 md:pb-20 text-center">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6">
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-800 dark:text-white mb-4">
-              Rencanakan Lari atau Perjalanan Sempurna Anda
+    <main className="overflow-x-hidden">
+      {/* Hero Section */}
+      <section className="relative pt-16 pb-24 md:pt-24 md:pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="text-center md:text-left">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-brand-dark dark:text-white mb-6">
+              Create Fake Running Routes
             </h1>
-            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto">
-              Buat rute khusus secara visual, hitung kecepatan Anda, dan ekspor file GPX untuk aplikasi kebugaran favorit Anda seperti Strava.
+            <p className="text-lg text-brand-secondary dark:text-gray-300 mb-10 max-w-lg mx-auto md:mx-0">
+              Fake The Run lets you draw custom, realistic running routes. Run anywhere, anytime, in any shape. Generate GPX files in one click.
             </p>
             <button
               onClick={onNavigateToCreate}
-              className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-transform transform hover:scale-105"
+              className="inline-flex items-center justify-center px-8 py-4 bg-brand-secondary text-white font-semibold rounded-full shadow-lg hover:opacity-90 transition-transform transform hover:scale-105"
             >
-              Mulai Membuat Rute Anda <ArrowRight className="w-5 h-5 ml-2" />
+              Create Your Route <ArrowRight className="w-5 h-5 ml-3" />
             </button>
           </div>
-        </section>
 
-        {/* Features Section */}
-        <section className="py-12 md:py-20 bg-slate-50 dark:bg-slate-800/50">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-3xl font-bold text-center text-slate-800 dark:text-white mb-12">
-              Fitur Canggih, Antarmuka Sederhana
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div className="p-6">
-                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 mx-auto mb-4">
-                  <Map className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Gambar Peta Interaktif</h3>
-                <p className="text-slate-600 dark:text-slate-300">
-                  Gambar rute Anda langsung di peta, dengan opsi untuk mengikuti jalan demi akurasi.
-                </p>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400 mx-auto mb-4">
-                  <Zap className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Perhitungan Kecepatan & Waktu</h3>
-                <p className="text-slate-600 dark:text-slate-300">
-                  Atur kecepatan yang Anda inginkan atau target waktu, dan biarkan aplikasi menghitung sisanya untuk Anda.
-                </p>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 mx-auto mb-4">
-                  <Download className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Ekspor File GPX</h3>
-                <p className="text-slate-600 dark:text-slate-300">
-                  Ekspor rute yang telah Anda buat dengan mudah sebagai file GPX, siap untuk diunggah ke Strava, Garmin, dan lainnya.
-                </p>
-              </div>
+          {/* Right Graphic */}
+          <div className="hidden md:flex justify-center items-center">
+            <div className="w-96 h-96 bg-brand-primary/10 dark:bg-brand-primary/20 rounded-full flex items-center justify-center p-8">
+              <p className="text-6xl font-black text-brand-secondary opacity-50 select-none">
+                fake the run
+              </p>
             </div>
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-16 md:py-24 bg-white dark:bg-brand-primary/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-brand-dark dark:text-white mb-4">
+              How It Works
+            </h2>
+            <p className="text-lg text-brand-secondary dark:text-gray-300 max-w-3xl mx-auto">
+              Create custom running routes in just three simple steps
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="group p-8 bg-brand-light dark:bg-brand-dark rounded-xl shadow-lg text-center transition-transform transform hover:-translate-y-2">
+              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-brand-secondary text-white mx-auto mb-6">
+                <PencilLine className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-semibold text-brand-dark dark:text-white mb-2">1. Design Your Route</h3>
+              <p className="text-brand-secondary dark:text-gray-300">
+                Choose a location and draw your route in any shape you want - letters, animals, or custom designs.
+              </p>
+            </div>
+            {/* Step 2 */}
+            <div className="group p-8 bg-brand-light dark:bg-brand-dark rounded-xl shadow-lg text-center transition-transform transform hover:-translate-y-2">
+              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-brand-secondary text-white mx-auto mb-6">
+                <FileCog className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-semibold text-brand-dark dark:text-white mb-2">2. Generate GPX File</h3>
+              <p className="text-brand-secondary dark:text-gray-300">
+                Our system creates a realistic GPX file with proper elevation data and route details.
+              </p>
+            </div>
+            {/* Step 3 */}
+            <div className="group p-8 bg-brand-light dark:bg-brand-dark rounded-xl shadow-lg text-center transition-transform transform hover:-translate-y-2">
+              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-brand-secondary text-white mx-auto mb-6">
+                <Download className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-semibold text-brand-dark dark:text-white mb-2">3. Download File</h3>
+              <p className="text-brand-secondary dark:text-gray-300">
+                In just one click, download your GPX file using your tokens.
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Mulai dari Rp 10.000 per unduhan file.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-brand-light dark:bg-brand-dark border-t border-black/10 dark:border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="text-center text-sm text-brand-secondary dark:text-gray-400">
+            <p>&copy; {new Date().getFullYear()} Fake The Run. All Rights Reserved.</p>
+            <p className="text-sm">
+              Buat, rencanakan, dan ekspor rute Anda untuk Strava dan aplikasi kebugaran lainnya
+            </p>
+            <p className="text-xs mt-2">
+              Kompatibel dengan format GPX • Siap diekspor untuk diunggah ke Strava
+            </p>
+          </div>
+
+        </div>
+      </footer>
+    </main>
+
   );
 };
 

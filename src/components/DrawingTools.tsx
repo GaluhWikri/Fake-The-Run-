@@ -1,4 +1,3 @@
-
 import { MapPin, Navigation, Route } from 'lucide-react';
 
 interface DrawingToolsProps {
@@ -8,26 +7,22 @@ interface DrawingToolsProps {
   onWaypointsToggle: () => void;
 }
 
-export default function DrawingTools({ 
+export default function DrawingTools({
   isDrawing,
   onDrawingToggle,
-  showWaypoints, 
-  onWaypointsToggle 
+  showWaypoints,
+  onWaypointsToggle
 }: DrawingToolsProps) {
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-lg">
-      <h3 className="text-sm font-medium text-slate-700 mb-3">
-        Route Planning Tools
-      </h3>
-      
+    <div className="bg-brand-light/50 dark:bg-brand-dark/50 rounded-lg p-4 shadow-inner">
       <div className="space-y-4">
         <button
           onClick={onDrawingToggle}
           className={`w-full p-3 rounded-lg border-2 transition-all hover:shadow-md ${
             isDrawing
-              ? 'border-blue-500 bg-blue-50 text-blue-600'
-              : 'border-slate-200 hover:border-slate-300'
+              ? 'border-brand-secondary bg-brand-secondary/10 text-brand-secondary'
+              : 'border-black/10 dark:border-white/10 hover:border-brand-secondary/50'
           }`}
         >
           <Route className="w-5 h-5 mx-auto mb-1" />
@@ -35,22 +30,22 @@ export default function DrawingTools({
             {isDrawing ? 'Drawing Mode' : 'View Mode'}
           </span>
           {isDrawing && (
-            <div className="text-xs text-blue-500 mt-1">
+            <div className="text-xs mt-1">
               Click map to add points
             </div>
           )}
         </button>
       </div>
-      
+
       <div className="flex items-center justify-between mt-4">
         <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-slate-600" />
-          <span className="text-sm text-slate-600">Show Waypoints</span>
+          <MapPin className="w-4 h-4 text-brand-dark dark:text-brand-light" />
+          <span className="text-sm text-brand-dark dark:text-brand-light">Show Waypoints</span>
         </div>
         <button
           onClick={onWaypointsToggle}
           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-            showWaypoints ? 'bg-blue-600' : 'bg-slate-200'
+            showWaypoints ? 'bg-brand-secondary' : 'bg-black/20 dark:bg-white/20'
           }`}
         >
           <span
@@ -60,13 +55,13 @@ export default function DrawingTools({
           />
         </button>
       </div>
-      
-      <div className="mt-4 p-3 bg-slate-50 rounded-lg">
+
+      <div className="mt-4 p-3 bg-white/50 dark:bg-black/20 rounded-lg">
         <div className="flex items-center gap-2 mb-2">
-          <Navigation className="w-4 h-4 text-slate-600" />
-          <span className="text-sm font-medium text-slate-700">How to use:</span>
+          <Navigation className="w-4 h-4 text-brand-secondary" />
+          <span className="text-sm font-medium text-brand-dark dark:text-brand-light">How to use:</span>
         </div>
-        <ul className="text-xs text-slate-600 space-y-1">
+        <ul className="text-xs text-brand-secondary dark:text-gray-300 space-y-1 pl-1">
           <li>• Search for locations using the search bar</li>
           <li>• Enable drawing mode</li>
           <li>• Click on map to add waypoints</li>
