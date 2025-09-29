@@ -1,11 +1,14 @@
 import React from 'react';
 import { ArrowRight, PencilLine, FileCog, Download } from 'lucide-react';
 
+// 1. Terima 'theme' di dalam interface props
 interface HomePageProps {
   onNavigateToCreate: () => void;
+  theme: 'dark' | 'light';
 }
 
-const HomePage: React.FC<HomePageProps> = ({ onNavigateToCreate }) => {
+// 2. Terima 'theme' sebagai parameter
+const HomePage: React.FC<HomePageProps> = ({ onNavigateToCreate, theme }) => {
   return (
     <main className="overflow-x-hidden">
       {/* Hero Section */}
@@ -30,9 +33,12 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToCreate }) => {
           {/* Right Graphic */}
           <div className="hidden md:flex justify-center items-center">
             <div className="w-96 h-96 bg-brand-primary/10 dark:bg-brand-primary/20 rounded-full flex items-center justify-center p-8">
-              <p className="text-6xl font-black text-brand-secondary opacity-50 select-none">
-                fake the run
-              </p>
+              {/* 3. Perbaiki cara logo ditampilkan di sini */}
+              <img 
+                src={theme === 'dark' ? '/lgooo.png' : '/lgoood.png'} 
+                alt="Fake The Run Graphic" 
+                className="w-64 h-64" 
+              />
             </div>
           </div>
         </div>
@@ -79,7 +85,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToCreate }) => {
               <p className="text-brand-secondary dark:text-gray-300">
                 In just one click, download your GPX file using your tokens.
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Mulai dari Rp 10.000 per unduhan file.</p>
+               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Mulai dari Rp 10.000 per unduhan file.</p>
             </div>
           </div>
         </div>
@@ -90,18 +96,10 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToCreate }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center text-sm text-brand-secondary dark:text-gray-400">
             <p>&copy; {new Date().getFullYear()} Fake The Run. All Rights Reserved.</p>
-            <p className="text-sm">
-              Buat, rencanakan, dan ekspor rute Anda untuk Strava dan aplikasi kebugaran lainnya
-            </p>
-            <p className="text-xs mt-2">
-              Kompatibel dengan format GPX • Siap diekspor untuk diunggah ke Strava
-            </p>
           </div>
-
         </div>
       </footer>
     </main>
-
   );
 };
 
